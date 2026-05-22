@@ -1,0 +1,13 @@
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
+
+# Raw option data is large and should be shared separately.
+OptionDataNM2026.csv
+OptionData*.csv
+
+# Local report server files.
+outputs/report_server_*.log
+outputs/report_server_*.pid
+

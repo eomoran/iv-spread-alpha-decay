@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IV Spread Workflow Summary</title>
+<script>
+window.MathJax = {
+  tex: {
+    inlineMath: [['\\(', '\\)']],
+    displayMath: [['\\[', '\\]']]
+  },
+  chtml: { scale: 0.98 },
+  startup: { typeset: true }
+};
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<style>
+:root {
+  --ink: #172033;
+  --muted: #5b687a;
+  --panel: #ffffff;
+  --bg: #f7f9fc;
+  --line: #d8e1ec;
+  --green: #0f766e;
+  --blue: #1d4ed8;
+  --orange: #c2410c;
+  --red: #b91c1c;
+  --violet: #6d28d9;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+header {
+  background: #ffffff;
+  border-bottom: 1px solid var(--line);
+  padding: 34px 42px 24px;
+}
+h1 {
+  margin: 0;
+  font-size: clamp(30px, 4vw, 54px);
+  line-height: 1.03;
+  letter-spacing: 0;
+  max-width: 1050px;
+}
+.sub {
+  margin-top: 14px;
+  max-width: 1020px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.48;
+}
+main {
+  width: min(1280px, calc(100% - 56px));
+  margin: 0 auto;
+  padding: 26px 0 50px;
+}
+section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+h2 {
+  margin: 0 0 12px;
+  font-size: 20px;
+  letter-spacing: 0;
+}
+h3 {
+  margin: 0 0 6px;
+  font-size: 15px;
+  letter-spacing: 0;
+}
+p {
+  color: #334155;
+  line-height: 1.55;
+  margin: 0 0 10px;
+}
+.note {
+  color: var(--muted);
+  font-size: 13px;
+}
+.workflow {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(132px, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+.step {
+  min-height: 190px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fbfdff;
+  position: relative;
+}
+.step::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -10px;
+  width: 16px;
+  height: 2px;
+  background: var(--line);
+}
+.step:last-child::after { display: none; }
+.num {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+.green { background: var(--green); }
+.blue { background: var(--blue); }
+.orange { background: var(--orange); }
+.red { background: var(--red); }
+.violet { background: var(--violet); }
+.slate { background: #334155; }
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  background: #fbfdff;
+}
+.formula {
+  background: #f8fafc;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  margin-top: 12px;
+  overflow-x: auto;
+}
+ul {
+  margin: 8px 0 0 18px;
+  padding: 0;
+  color: #334155;
+  line-height: 1.52;
+}
+li { margin: 4px 0; }
+.matrix {
+  display: grid;
+  grid-template-columns: 220px repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.matrix div {
+  padding: 11px 12px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: #ffffff;
+}
+.matrix div:nth-child(4n) { border-right: 0; }
+.matrix div:nth-last-child(-n + 4) { border-bottom: 0; }
+.matrix .head {
+  background: #f1f5f9;
+  font-weight: 700;
+  color: #334155;
+}
+.matrix .rowhead {
+  background: #f8fafc;
+  font-weight: 650;
+}
+.swimlane {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.lane-label {
+  background: #f1f5f9;
+  border-right: 1px solid var(--line);
+  padding: 13px;
+  font-weight: 700;
+  color: #334155;
+}
+.lane-body {
+  padding: 13px;
+  background: #ffffff;
+  border-bottom: 1px solid var(--line);
+}
+.swimlane .lane-label:nth-last-child(2),
+.swimlane .lane-body:last-child { border-bottom: 0; }
+code {
+  background: #eef2f7;
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: #172033;
+}
+@media (max-width: 1050px) {
+  main { width: calc(100% - 32px); }
+  header { padding-left: 20px; padding-right: 20px; }
+  .workflow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .step::after { display: none; }
+  .grid, .cards { grid-template-columns: 1fr; }
+  .matrix { grid-template-columns: 160px repeat(3, minmax(0, 1fr)); font-size: 13px; }
+}
+@media (max-width: 680px) {
+  .workflow { grid-template-columns: 1fr; }
+  .matrix, .swimlane { display: block; }
+  .matrix div, .lane-label, .lane-body { border-right: 0; }
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>IV spread alpha-decay workflow</h1>
+  <div class="sub">A visual summary of the analysis pipeline used to test whether the paper-style option-implied volatility spread still predicts index returns. This page describes the methodology only and intentionally omits results.</div>
+</header>
+<main>
+  <section>
+    <h2>End-to-end pipeline</h2>
+    <div class="workflow">
+      <div class="step">
+        <span class="num green">1</span>
+        <h3>Load option chain</h3>
+        <p>Read daily option rows with spot, strike, maturity, bid, ask, mid, implied vol, dividend, and risk-free rate.</p>
+      </div>
+      <div class="step">
+        <span class="num blue">2</span>
+        <h3>Filter quotes</h3>
+        <p>Keep usable index options: 10-60 days to expiry, IV between 3% and 200%, and option mid-price at least $0.125.</p>
+      </div>
+      <div class="step">
+        <span class="num orange">3</span>
+        <h3>Build signals</h3>
+        <p>Construct paper-style OTM put minus ATM call spread, bid-ask-weighted spread, delta-bucket spread, and ATM call-minus-put alternatives.</p>
+      </div>
+      <div class="step">
+        <span class="num red">4</span>
+        <h3>Align returns</h3>
+        <p>Compute forward index log returns and subtract the risk-free rate to form excess returns at each horizon.</p>
+      </div>
+      <div class="step">
+        <span class="num violet">5</span>
+        <h3>Test prediction</h3>
+        <p>Estimate predictive regressions using non-overlapping multi-day windows to avoid stale overlapping-horizon inference.</p>
+      </div>
+      <div class="step">
+        <span class="num slate">6</span>
+        <h3>Assess trading use</h3>
+        <p>Run expanding-window timing rules, threshold variants, and ATM call-put gating, then compare gross and net execution behavior.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="grid">
+    <div>
+      <h2>Core spread definition</h2>
+      <p>The primary signal follows the paper's put-minus-call construction, not a simple ATM call-minus-put skew measure.</p>
+      <div class="formula">
+        \[
+        VS_t=\overline{\sigma}^{p}_{t,OTM}-\overline{\sigma}^{c}_{t,ATM}
+        \]
+        \[
+        OTM\ put: 0.80\le K/S\le0.95,\quad ATM\ call:0.95\le K/S\le1.05
+        \]
+      </div>
+    </div>
+    <div>
+      <h2>Return target</h2>
+      <p>The analysis tests whether today's spread forecasts future index excess returns rather than raw returns.</p>
+      <div class="formula">
+        \[
+        R^e_{t+h}=\log(S_{t+h}/S_t)-\sum_{j=1}^{h} r^f_{t+j}/252
+        \]
+        \[
+        R^e_{t+h}=\alpha+\beta VS_t+\varepsilon_{t+h}
+        \]
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Signal variants</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Paper-style equal weight</h3>
+        <p>Average all eligible OTM put IVs and subtract the average eligible ATM call IVs.</p>
+      </div>
+      <div class="card">
+        <h3>Quote-quality weighted</h3>
+        <p>Weight each option by inverse percentage bid-ask spread.</p>
+        <div class="formula">\[w_i=\left((Ask_i-Bid_i)/Mid_i\right)^{-1}\]</div>
+      </div>
+      <div class="card">
+        <h3>Delta-bucket robustness</h3>
+        <p>Estimate Black-Scholes deltas and compare 10-40 delta puts against 45-55 delta calls.</p>
+      </div>
+      <div class="card">
+        <h3>ATM call-put signal</h3>
+        <p>Test the more traditional \(IV^c_{ATM}-IV^p_{ATM}\) signal separately as a possible bullish gate.</p>
+      </div>
+      <div class="card">
+        <h3>Threshold timing</h3>
+        <p>Move to cash only when the forecast is sufficiently negative, rather than using the sign alone.</p>
+      </div>
+      <div class="card">
+        <h3>Gated timing</h3>
+        <p>Allow a positive ATM call-put signal to keep the strategy invested when the paper-style forecast is bearish.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Inference choices</h2>
+    <div class="matrix">
+      <div class="head">Area</div>
+      <div class="head">What is done</div>
+      <div class="head">Why it matters</div>
+      <div class="head">Main caveat</div>
+
+      <div class="rowhead">Daily horizon</div>
+      <div>OLS with heteroskedasticity/autocorrelation-aware standard errors.</div>
+      <div>Daily returns are noisy and can have serial dependence.</div>
+      <div>Short-horizon signals can look unstable across regimes.</div>
+
+      <div class="rowhead">Multi-day horizons</div>
+      <div>Use non-overlapping forward returns for 5d, 10d, and 21d tests.</div>
+      <div>Avoids inflated significance from overlapping return windows.</div>
+      <div>Fewer observations means lower statistical power.</div>
+
+      <div class="rowhead">Risk-free rate</div>
+      <div>Subtract dataset risk-free rate for excess returns; cash earns risk-free in timing tests.</div>
+      <div>Makes the comparison fairer than raw return timing.</div>
+      <div>Assumes the dataset rate is correctly aligned and annualized.</div>
+
+      <div class="rowhead">Costs</div>
+      <div>Subtract 1bp when the strategy switches between index and cash.</div>
+      <div>Separates gross forecast value from basic execution drag.</div>
+      <div>Does not fully model slippage, taxes, financing, or capacity.</div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Backtest workflow</h2>
+    <div class="swimlane">
+      <div class="lane-label">Training data</div>
+      <div class="lane-body">At each decision date, fit the predictive equation using only observations available before that date.</div>
+      <div class="lane-label">Forecast</div>
+      <div class="lane-body">Compute the next-day expected excess return from the current IV-spread signal.</div>
+      <div class="lane-label">Allocation</div>
+      <div class="lane-body">Invest in the index when forecast excess return is above the selected cash threshold; otherwise hold cash at the risk-free rate.</div>
+      <div class="lane-label">Net return</div>
+      <div class="lane-body">Apply the realized index or cash return, then subtract the switching cost when allocation changes.</div>
+    </div>
+    <div class="formula">
+      \[
+      I_t=\mathbf{1}\{\widehat{R}^{e}_{t+1}>-\theta\},\quad
+      r^{strategy}_t=I_t r^{index}_t+(1-I_t)r^f_t-cost_t
+      \]
+    </div>
+  </section>
+
+  <section>
+    <h2>Known limits</h2>
+    <ul>
+      <li>The raw file has no option volume or open interest, so the original volume/open-interest spread variants cannot be exactly replicated.</li>
+      <li>Bid-ask weighting is a quote-quality proxy, not a direct proxy for volume, open interest, or signed option demand.</li>
+      <li>Threshold and gate variants are exploratory unless they are locked before a future out-of-sample test.</li>
+      <li>The workflow tests index timing, not a self-financing option portfolio.</li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>
