@@ -10,6 +10,7 @@ The raw option-chain CSV is intentionally excluded from Git because it is large.
 - `requirements.txt` - Python package dependencies.
 - `outputs/iv_spread_decay_report.html` - visual report with results.
 - `outputs/workflow_summary.html` - visual methodology summary without results.
+- `outputs/iv_spread_class_presentation.pptx` - short 5-10 minute class presentation deck.
 - `outputs/iv_spread_results.json` - machine-readable result summary.
 - `outputs/daily_iv_spread_returns.csv` - daily signal and return panel.
 - `outputs/oos_strategy.csv` - out-of-sample strategy backtest panel.
@@ -90,4 +91,3 @@ Recommended Git contents:
 - Commit code, requirements, README, workflow summary, result report, and compact output tables.
 - Exclude `.venv/`, `.DS_Store`, local server logs, and the raw option CSV.
 - Share the raw data separately through a storage link if needed.
-
